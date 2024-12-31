@@ -60,7 +60,8 @@ export const login = async (req, res) => {
         res.cookie('token', token, {
             httpOnly: true,  // The cookie is not accessible via JavaScript; only to the server
             secure: true,  // Use secure cookies in production (https only)
-            sameSite: 'None'  // The cookie is sent only to the same site as the origin of the request
+            sameSite: 'None',
+            maxAge: 3600000// The cookie is sent only to the same site as the origin of the request
         });
 
         // Send the response with the token set in the cookie
