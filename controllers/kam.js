@@ -59,8 +59,8 @@ export const login = async (req, res) => {
         // Set the token as a cookie in the response
         res.cookie('token', token, {
             httpOnly: true,  // The cookie is not accessible via JavaScript; only to the server
-            secure: process.env.NODE_ENV === 'production',  // Use secure cookies in production (https only)
-            sameSite: 'strict'  // The cookie is sent only to the same site as the origin of the request
+            secure: true,  // Use secure cookies in production (https only)
+            sameSite: 'None'  // The cookie is sent only to the same site as the origin of the request
         });
 
         // Send the response with the token set in the cookie
