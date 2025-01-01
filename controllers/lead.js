@@ -34,7 +34,7 @@ export const createLead = async (req, res, next) => {
 // Get all leads with details of associated POCs
 export const getAllLeads = async (req, res) => {
   try {
-    //find all leads with kamid=res.locals.userId and populate the 'pointOfContacts' field with details of associated POCs
+    
     const leads = await Lead.find({ KamId: res.locals.userId }).populate("pointOfContacts");
     res.status(200).json(leads);
   } catch (error) {
@@ -50,7 +50,7 @@ export const getAllLeads = async (req, res) => {
 // Get leads to be called today for a specific KAM
 export const getLeadsToBeCalledToday = async (req, res) => {
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Normalize today's date to the start of the day
+  today.setHours(0, 0, 0, 0); 
   console.log(today);
   const kamId = res.locals.userId;
 
@@ -58,13 +58,13 @@ export const getLeadsToBeCalledToday = async (req, res) => {
     const leads = await Lead.aggregate([
       {
         $match: {
-          KamId: new mongoose.Types.ObjectId(kamId), // Ensure this matches leads associated with the specific KAM
+          KamId: new mongoose.Types.ObjectId(kamId), 
         }
       },
       {
         $addFields: {
           nextCallDate: {
-            $add: ["$lastContactedDate", { $multiply: ["$callFrequency", 1000 * 60 * 60 * 24] }]  // Adds the callFrequency in milliseconds
+            $add: ["$lastContactedDate", { $multiply: ["$callFrequency", 1000 * 60 * 60 * 24] }]  
           }
         }
       },
@@ -72,11 +72,11 @@ export const getLeadsToBeCalledToday = async (req, res) => {
         $match: {
           $or: [
             {
-              nextCallDate: today, // Compare nextCallDate to today's date
-              leadStatus: "CONTACTED" // Assuming you only want leads that have been previously contacted
+              nextCallDate: today, 
+              leadStatus: "CONTACTED" 
             },
             {
-              leadStatus: "NEW" // Leads with a status of "NEW"
+              leadStatus: "NEW" 
             }
           ]
         }}
@@ -91,34 +91,34 @@ export const getLeadsToBeCalledToday = async (req, res) => {
 
 
 
-
+//get top three reataurants by order value
 export const getTopPerformingRestaurants = async (req, res) => {
-  const kamId = res.locals.userId; // Assuming the KamId is stored in res.locals.userId
+  const kamId = res.locals.userId; 
 
   try {
     const topRestaurants = await Lead.aggregate([
       {
         $match: {
-          leadStatus: "CONVERTED", // Filter for converted leads
-          KamId: new mongoose.Types.ObjectId(kamId), // Ensure the leads are associated with the specific KAM
+          leadStatus: "CONVERTED", 
+          KamId: new mongoose.Types.ObjectId(kamId), 
         }
       },
       {
         $group: {
           _id: {
-            restaurantName: "$restaurantName", // Group by restaurant name
-            restaurantId: "$_id" // Include the restaurant ID
+            restaurantName: "$restaurantName", 
+            restaurantId: "$_id" 
           },
-          totalOrderValue: { $sum: "$order" }, // Sum up all orders for each restaurant
-          averageOrderValue: { $avg: "$order" }, // Calculate average order value
-          leads: { $push: "$$ROOT" } // Collect all data related to the restaurant
+          totalOrderValue: { $sum: "$order" }, 
+          averageOrderValue: { $avg: "$order" }, 
+          leads: { $push: "$$ROOT" } 
         }
       },
       {
-        $sort: { totalOrderValue: -1 } // Sort by total order value descending
+        $sort: { totalOrderValue: -1 } 
       },
       {
-        $limit: 3 // Limit to top 3
+        $limit: 3 
       },
       {
         $project: {

@@ -2,7 +2,6 @@ import {Poc, Lead} from "../models/index.js";
 
 
 //create new poc
-
 export const createPoc = async (req, res, next) => {
     try {
       console.log(req.body);
@@ -29,6 +28,7 @@ export const createPoc = async (req, res, next) => {
       next(error);
     }
   };
+ 
 
 //get all pocs for a restaurant id make it post request
 export const getAllPocs = async (req, res) => {

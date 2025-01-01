@@ -1,4 +1,4 @@
-// utils/jwt.js
+
 
 import jwt from 'jsonwebtoken';
 
@@ -15,6 +15,6 @@ export const verifyToken = (token) => {
     try {
         return jwt.verify(token, SECRET_KEY);
     } catch (error) {
-        return null;  // return null if the token is invalid or expired
+        return null;  
     }
 };

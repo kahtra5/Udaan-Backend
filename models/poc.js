@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-// Define the POC Schema
+
 const pocSchema = new mongoose.Schema(
   {
     interactions: [
@@ -26,17 +26,17 @@ const pocSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
-      match: [/^\d{10}$/, "Phone number must be a 10 digit number"], // Basic phone number validation
+      match: [/^\d{10}$/, "Phone number must be a 10 digit number"], 
     },
     email: {
       type: String,
       required: true,
       lowercase: true,
-      match: [/^\S+@\S+\.\S+$/, "Invalid email address format"], // Basic email validation
+      match: [/^\S+@\S+\.\S+$/, "Invalid email address format"], 
     },
   },
   { timestamps: true }
 );
 
-// Export the POC Model
+
 export default mongoose.model("POC", pocSchema);

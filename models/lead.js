@@ -27,7 +27,7 @@ const leadSchema = new mongoose.Schema(
     phoneNumber: {
       type: String,
       required: true,
-      match: [/^\d{10}$/, "Phone number must be a 10 digit number"], // Basic phone number validation
+      match: [/^\d{10}$/, "Phone number must be a 10 digit number"], 
     },
     leadStatus: {
       type: String,
@@ -58,7 +58,7 @@ const leadSchema = new mongoose.Schema(
     },
     order: {
       type: Number,
-      default: 0 // Default value set to 0
+      default: 0 
     }
   },
   { timestamps: true }

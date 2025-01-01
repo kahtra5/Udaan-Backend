@@ -11,7 +11,7 @@ export const createInteraction = async (req, res, next) => {
             interactionDate,
             interactionType,
             details,
-            order,  // Captures the monetary value or count of an order placed during the interaction
+            order,  
         } = req.body;
 
         const newInteraction = new Interaction({
@@ -23,33 +23,33 @@ export const createInteraction = async (req, res, next) => {
             order
         });
 
-        // Save the new interaction to the database
+        
         const savedInteraction = await newInteraction.save();
 
-        // Update the Point of Contact with the new interaction ID
+        
         await Poc.updateOne(
             { _id: contactedPOCId },
             { $push: { interactions: savedInteraction._id } }
         );
 
-        // Prepare the data to update the lead
+        
         const leadUpdateData = {
             $push: { interactions: savedInteraction._id },
             $set: { lastContactedDate: interactionDate }
         };
 
-        // Check if there is an order value and update lead accordingly
+        
         if (order > 0) {
             leadUpdateData.$set.leadStatus = "CONVERTED";
-            leadUpdateData.$inc = { order: order };  // Increment 'order' by the order
+            leadUpdateData.$inc = { order: order };  
         } else {
-            // Ensure the status is set to 'CONTACTED' if no order is placed and not already in a later stage
+            
             if (!newInteraction.leadStatus || newInteraction.leadStatus === "NEW") {
                 leadUpdateData.$set.leadStatus = "CONTACTED";
             }
         }
 
-        // Update the lead with the new status and interaction details
+        
         await Lead.updateOne(
             { _id: restaurantId },
             leadUpdateData
