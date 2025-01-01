@@ -12,9 +12,6 @@ const app = express();
 const port = 3000;
 
 const corsOptions = {
-  origin: 'https://udaan-frontend.onrender.com',  //URL of your React app
-  credentials: true,  
-  optionsSuccessStatus: 200 
   origin: 'https://udaan-frontend1.onrender.com',  // This should match the URL of your React app
   credentials: true,  // This is important to include credentials
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204

@@ -75,7 +75,7 @@ export const getInteractionsByRestaurantId = async (req, res) => {
 
     try {
         const interactions = await Interaction.find({ restaurantId })
-            .sort({ interactionDate: 1 }); // Sort interactions by date
+            .sort({ interactionDate: 1 }); 
         res.status(200).json(interactions);
     } catch (error) {
         console.error('Error fetching interactions:', error);
