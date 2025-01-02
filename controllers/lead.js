@@ -31,16 +31,45 @@ export const createLead = async (req, res, next) => {
 
 
 
-// Get all leads with details of associated POCs
+
+//get all leads
 export const getAllLeads = async (req, res) => {
   try {
-    
-    const leads = await Lead.find({ KamId: res.locals.userId }).populate("pointOfContacts");
+    const leads = await Lead.aggregate([
+      {
+        $match: {
+          KamId: new mongoose.Types.ObjectId(res.locals.userId) // Match leads for the specific KAM
+        }
+      },
+      {
+        $lookup: {
+          from: "pocs", // Collection name for POCs
+          localField: "pointOfContacts", // Field in the Lead schema that holds POC references
+          foreignField: "_id", // Field in the POC schema that matches
+          as: "pocDetails" // Name for the resulting array of POC details
+        }
+      },
+      {
+        $project: {
+          restaurantName: 1,
+          address: 1,
+          email: 1,
+          leadStatus: 1,
+          callFrequency: 1,
+          lastContactedDate: 1,
+          order: 1, // Include the orders if present in the schema
+          pocDetails: 1 // Include the POC details
+        }
+      }
+    ]);
+
     res.status(200).json(leads);
   } catch (error) {
+    console.error("Error fetching leads with POC details:", error);
     res.status(500).json({ message: "Failed to fetch leads", error });
   }
 };
+
 
 
 
